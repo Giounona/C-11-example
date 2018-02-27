@@ -6,61 +6,12 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
-#include <utility>
 #include "lamp.h"
+#include <iostream>
+#include <array>
+#include <algorithm>
 using namespace std;
-
-
-void PrintLamp(const Lamp& lamp){
-	std::cout<<"house code:"<< static_cast<char>(static_cast<int>(lamp.device.first)+65)<<std::endl;
-	std::cout<<"unit code:"<< lamp.device.second<<std::endl;
-	std::cout<<"device state:"<< lamp.state<<std::endl;
-}
-
-
-void Lamp_on(Lamp& lamp){
-	lamp.state=true;
-	std::cout<<"Lamp "<< static_cast<char>(static_cast<int>(lamp.device.first)+65)<<
-			lamp.device.second<<" has been turned on"<<std::endl;
-
-}
-
-void Lamp_off(Lamp& lamp){
-	lamp.state=false;
-	std::cout<<"Lamp "<< static_cast<char>(static_cast<int>(lamp.device.first)+65)<<
-			lamp.device.second<<" has been turned off"<<std::endl;
-
-}
-
-Lamp Make_lamp(void){
-	char house_in ;
-	int  code_in {0};
-	bool flag=false;
-
-	while (flag==false){
-		std::cout<<"Please give valid house code:"<<std::endl;
-		std::cin >> house_in;
-		if (house_in>='A' && house_in<='P'){
-			flag=true;
-		}
-	}
-
-	flag=false;
-	while (flag==false){
-		std::cout<<"Please give valid unit code:"<<std::endl;
-		std::cin >> code_in;
-		if (code_in<=16 && code_in!=0){
-			flag=true;
-		}
-	}
-
-	Lamp lamp{};
-	lamp.device.first=static_cast<HouseCode>(house_in -65);
-	lamp.device.second=code_in;
-	lamp.state = false;
-	return lamp;
-}
+using namespace Home;
 
 int main() {
 
@@ -76,10 +27,37 @@ int main() {
 	std::cout<<"Lamp2"<<endl;
 	PrintLamp(lamp2);
 
-	Lamp lamp3=Make_lamp();
-	PrintLamp(lamp3);
+	std::array <Lamp, 10> lamp_array{Lamp{{HouseCode::A, 1}, false},
+		Lamp{  {HouseCode::B, 2}, false},
+		Lamp{  {HouseCode::B, 2}, false},
+		Lamp{}};
 
-	Lamp_on(lamp1);
-	Lamp_off(lamp1);
+	Lamp_array_on(lamp_array);
+
+	for (Lamp& elem: lamp_array){
+		if (elem.device.first != HouseCode::INVALID)
+			PrintLamp(elem);
+	}
+
+	size_t n_lamps_on = std::count_if(lamp_array.begin(),lamp_array.end(),&is_lamp_on);
+	std::cout << "there are " <<n_lamps_on <<" lamps on" <<std::endl;
+
+//	for(size_t i=0;i<lamp_array.size();i+=2){
+//		std::cout<<lamp_array[i].device.second<<std::endl;
+//	}
+//
+//	for(auto it = std::begin(lamp_array); it != std::end(lamp_array); it+=2){
+//		std::cout<<it->device.second<<std::endl;}
+
+
+	//
+	//	Lamp lamp3=Make_lamp();
+	//	PrintLamp(lamp3);
+	//
+	//
+	//
+	//
+	//	Lamp_on(lamp1);
+	//	Lamp_off(lamp1);
 	return 0;
 }
