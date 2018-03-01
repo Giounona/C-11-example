@@ -11,20 +11,20 @@
 
 
 namespace Home{
-class Lamp;
+class I_switchable;
 
 class Room {
 private:
-	static constexpr unsigned max_lamps{4};
+	static constexpr unsigned max_modules{4};
 	unsigned int idx {0};
-	std::array<Lamp*, max_lamps> lamp_array {{nullptr}} ;
+	std::array<I_switchable*, max_modules> module_array {{nullptr}} ;
 	std::string name;
 public:
 
 	void all_on(void);
 	void all_off(void);
 	void status(void);
-	bool add(Lamp& device);
+	bool add(I_switchable& device);
 	void set_name(const char* new_name);
 	void dim(uint32_t percent);
 

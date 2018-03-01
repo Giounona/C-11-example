@@ -13,10 +13,10 @@
 
 namespace Home{
 //helper functions for count_if
-static bool exists_and_is_on(Lamp* lamp){
+static bool exists_and_is_on(I_switchable* lamp){
 	return (lamp != nullptr && lamp->is_on());
 }
-static bool exists_and_is_off(Lamp* lamp){
+static bool exists_and_is_off(I_switchable* lamp){
 	return (lamp && !lamp->is_on());
 }
 
@@ -28,56 +28,50 @@ Room::~Room() {
 	// TODO Auto-generated destructor stub
 }
 
-bool Room::add(Lamp& device){
-
-	if(idx==max_lamps){
+bool Room::add(I_switchable& device){
+	if(idx==max_modules){
 		std::cout<<"No more lamps can be added"<<std::endl;
 		return false;
 	}
 	else{
-		lamp_array[idx]=&device;
+		module_array[idx]=&device;
 		idx++;
 		return true;
 	}
-
 }
 
 void Room::all_on(void){
 	for (unsigned i=0; i<idx; i++ ){
-		(lamp_array[i])->on();
+		(module_array[i])->on();
 	}
 }
 
 void Room::all_off(void){
 	for (unsigned i=0; i<idx; i++ ){
-		(lamp_array[i])->off();
+		(module_array[i])->off();
 	}
 }
 void Room::dim(uint32_t percent){
 
 	for (unsigned i=0; i<idx; i++ ){
-		Lamp* lamp_i = lamp_array[i];
+		I_switchable* lamp_i = module_array[i];
 
 		Dimmable_lamp* dim_lamp{dynamic_cast<Dimmable_lamp*>(lamp_i)};
 		if(dim_lamp !=nullptr){
 			dim_lamp->dim(percent);
 		}
 	}
-
-
 }
 
 void Room::status(void){
-	int lights_on  = std::count_if(lamp_array.begin(), lamp_array.end(), &exists_and_is_on);
-	int lights_off = std::count_if(lamp_array.begin(), lamp_array.end(), &exists_and_is_off);
-	std::cout << "In " << name << " there are " << lights_on << " lamps on and "
+	int lights_on  = std::count_if(module_array.begin(), module_array.end(), &exists_and_is_on);
+	int lights_off = std::count_if(module_array.begin(), module_array.end(), &exists_and_is_off);
+	std::cout << "In " << name << " there are " << lights_on << " switches on and "
 			<< lights_off << " lamps off.\n";
 }
 
 void Room::set_name(const char* new_name) {
 	name = new_name;
 }
-
-
 
 }
