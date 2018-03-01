@@ -4,15 +4,30 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/Dimmablelamp.cpp \
+../src/Event.cpp \
+../src/EventList.cpp \
+../src/Instant.cpp \
 ../src/Lamp.cpp \
+../src/Room.cpp \
 ../src/house.cpp 
 
 OBJS += \
+./src/Dimmablelamp.o \
+./src/Event.o \
+./src/EventList.o \
+./src/Instant.o \
 ./src/Lamp.o \
+./src/Room.o \
 ./src/house.o 
 
 CPP_DEPS += \
+./src/Dimmablelamp.d \
+./src/Event.d \
+./src/EventList.d \
+./src/Instant.d \
 ./src/Lamp.d \
+./src/Room.d \
 ./src/house.d 
 
 

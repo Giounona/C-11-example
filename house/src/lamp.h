@@ -19,20 +19,33 @@ enum class HouseCode: unsigned char{
 };
 
 using DeviceCode = std::pair <HouseCode, int>;
-struct Lamp{
-	DeviceCode device;
-	bool state;
-};
+
+class Lamp{
+	private:
+		DeviceCode device {HouseCode::INVALID, 0};
+		bool state {false};
+
+	public:
+		Lamp()=default;
+		Lamp( HouseCode house_code, int unit_code);
+		~Lamp();
+		void set_id(DeviceCode);
+		DeviceCode id(void);
+		virtual void on(void);
+		virtual void off(void);
+		virtual bool is_on(void)  const;
+		virtual void status(void);
+	};
 
 using Lamp_Array=std::array<Lamp,10>;
 
-void Lamp_on(Lamp& lamp);
-void Lamp_off(Lamp& lamp);
 Lamp Make_lamp(void);
-void PrintLamp(const Lamp& lamp);
 void Lamp_array_on(Lamp_Array& lamp_array);
 void Lamp_array_off(Lamp_Array& lamp_array);
-bool is_lamp_on(const Lamp& lamp);
+
+void Lamp_status(Lamp* lmp);
+void Lamp_status(const Lamp& lmp);
+
 
 }
 #endif /* LAMP_H_ */

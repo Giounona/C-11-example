@@ -7,57 +7,50 @@
 //============================================================================
 
 #include "lamp.h"
+
+#include "Dimmablelamp.h"
+#include "Room.h"
+#include "EventList.h"
+#include "Event.h"
+#include "Instant.h"
 #include <iostream>
 #include <array>
 #include <algorithm>
 using namespace std;
 using namespace Home;
+using namespace Time;
 
 int main() {
+	Lamp lamp_a2{ HouseCode::A, 2};
+	Lamp lamp_a3 {HouseCode::A, 3};
+	Lamp lamp_b1 {HouseCode::B, 1};
+	Dimmable_lamp dim_lamp1 {HouseCode::B , 2};
+	dim_lamp1.dim(0);
 
-	Lamp lamp1 {{HouseCode::A, 1}, false };
-	Lamp lamp2{};
+	Room room_a{};
+	Room room_b{};
+	room_a.add(lamp_a2);
+	room_a.add(lamp_a3);
+	room_b.add(lamp_b1);
+	room_b.add(dim_lamp1);
+	room_b.dim(50);
 
-	lamp2.device.first=HouseCode::B;
-	lamp2.device.second=2;
-	lamp2.state=false;
 
-	std::cout<<"Lamp1"<<endl;
-	PrintLamp(lamp1);
-	std::cout<<"Lamp2"<<endl;
-	PrintLamp(lamp2);
 
-	std::array <Lamp, 10> lamp_array{Lamp{{HouseCode::A, 1}, false},
-		Lamp{  {HouseCode::B, 2}, false},
-		Lamp{  {HouseCode::B, 2}, false},
-		Lamp{}};
-
-	Lamp_array_on(lamp_array);
-
-	for (Lamp& elem: lamp_array){
-		if (elem.device.first != HouseCode::INVALID)
-			PrintLamp(elem);
-	}
-
-	size_t n_lamps_on = std::count_if(lamp_array.begin(),lamp_array.end(),&is_lamp_on);
-	std::cout << "there are " <<n_lamps_on <<" lamps on" <<std::endl;
-
-//	for(size_t i=0;i<lamp_array.size();i+=2){
-//		std::cout<<lamp_array[i].device.second<<std::endl;
-//	}
 //
-//	for(auto it = std::begin(lamp_array); it != std::end(lamp_array); it+=2){
-//		std::cout<<it->device.second<<std::endl;}
+//	Time::Event e1 { Instant {0,0}, Instant {0,0}, room_a};
+//	Time::Event e2 { };
+//
+//	Time::EventList events {};
+//
+//	events.add_event( Time::Instant { 9,00}, {9,10}, room_a );
+//	events.add_event( Time::Instant { 9,05}, {9,10}, room_b );
+//
+//	//update clock
+//	events.update_time( Time::Instant { 9, 00});
+//	events.update_time( Time::Instant { 9, 01});
+//	events.update_time( Time::Instant { 9, 05});
+//	events.update_time( Time::Instant { 9, 10});
 
-
-	//
-	//	Lamp lamp3=Make_lamp();
-	//	PrintLamp(lamp3);
-	//
-	//
-	//
-	//
-	//	Lamp_on(lamp1);
-	//	Lamp_off(lamp1);
 	return 0;
 }

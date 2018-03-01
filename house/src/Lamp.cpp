@@ -15,27 +15,52 @@ using namespace std;
 
 
 namespace Home{
-void PrintLamp(const Lamp& lamp){
-	std::cout<<"house code:";
 
-	if (lamp.device.first == HouseCode::INVALID){
-		std::cout << " invalid" ;
-	}else{
-		std::cout <<static_cast<char>(static_cast<int>(lamp.device.first)+64);
+Lamp::Lamp(HouseCode house_code, int unit_code):
+						device {house_code, unit_code}
+{
+	std::cout<<"Constructing from non-default constructor: ";
+	status();
+}
+
+Lamp::~Lamp(){
+	state = false;
+	cout<<"Destroying: ";
+	status();
+}
+
+void Lamp::status(){
+	if (device.first != HouseCode::INVALID){
+		std::cout<<"house code:";
+		std::cout <<static_cast<char>(static_cast<int>(device.first)+64);
+		std::cout<<"     unit code:"<< device.second	<<
+				"     device state:"<< state<<std::endl;
 	}
-	std::cout	<<std::endl;
-	std::cout<<"unit code:"<< lamp.device.second<<std::endl;
-	std::cout<<"device state:"<< lamp.state<<std::endl;
 }
 
-void Lamp_on(Lamp& lamp){
-	lamp.state=true;
-	//PrintLamp(lamp);
+
+void Lamp::set_id(DeviceCode d){
+	device.first=d.first;
+	device.second=d.second;
 }
 
-void Lamp_off(Lamp& lamp){
-	lamp.state=false;
-	//PrintLamp(lamp);
+DeviceCode Lamp::id(){
+	return {device.first, device.second};
+}
+
+void Lamp::on(){
+	state=true;
+	std::cout << "Turning on  lamp: ";
+	status();
+}
+
+void Lamp::off(){
+	state=false;
+	std::cout << "Turning off lamp: ";status();
+}
+
+bool Lamp::is_on() const{
+	return (state && device.first!=HouseCode::INVALID);
 }
 
 Lamp Make_lamp(void){
@@ -61,32 +86,44 @@ Lamp Make_lamp(void){
 		}
 	}
 
-	Lamp lamp{};
-	lamp.device.first=static_cast<HouseCode>(house_in -64);
-	lamp.device.second=code_in;
-	lamp.state = false;
-	return lamp;
+	return Lamp(static_cast<HouseCode>(house_in -64), code_in);
 }
+
+
 
 void Lamp_array_on(Lamp_Array& lamp_array){
 	for (Lamp& elem: lamp_array){
-			if (elem.device.first != HouseCode::INVALID)
-				Lamp_on( elem);
-		}
+		if (elem.id().first != HouseCode::INVALID)
+			elem.on();
+	}
 }
 
 void Lamp_array_off(Lamp_Array& lamp_array){
 	for (Lamp& elem: lamp_array){
-			if (elem.device.first != HouseCode::INVALID)
-				Lamp_off(elem);
-		}
+		if (elem.id().first != HouseCode::INVALID)
+			elem.off();
+	}
 }
 
-bool is_lamp_on(const Lamp& lamp){
-	return (lamp.state && lamp.device.first!=HouseCode::INVALID);
+void Lamp_status(Lamp* lmp){
+	bool stat=(*lmp).is_on();
+	if (stat==true){
+		std::cout<<"The lamp is "<<"on"<<std::endl;
+	}
+	else{
+		std::cout<<"The lamp is "<<"off"<<std::endl;
+
+	}
 }
 
+void Lamp_status(const Lamp& lmp){
+	bool stat=lmp.is_on();
+	if (stat==true){
+		std::cout<<"The lamp is "<<"on"<<std::endl;
+	}
+	else{
+		std::cout<<"The lamp is "<<"off"<<std::endl;
 
+	}
 }
-
-
+}
